@@ -1,0 +1,38 @@
+DSS 数字签名标准
+DSA 数字签名算法
+ECDSA 椭圆曲线数字签名算法：速度快/强度高/签名短
+RSA算法 三个联合发明此算法的人的姓氏的首字母
+PKCS pubKey-cryptography-standard 公钥加密标准，共15个标准，常用标准主要包括7（密码消息语法标准,.p7b,.p7c,.spc），10（证书请求语法标准,.p10,.csr），12（个人信息交换语法标准,.p12,.pfx）
+数字证书的常见编码格式CER(规范编码格式，变长模式),DER（卓越编码格式，定长模式）
+数字证书X.509常见的有3个版本，金融行业里最常使用的是X.509V3
+JKS java-key-store java原生的密钥库/信任库文件
+PEM privacy-enhanced-mail隐私增强邮件,使用多种方法提供机密性、认证性和信息完整性的电子邮件，在因特网中没有被广泛配置，但在openSSL中，却是最为常见的密钥库文件。
+//以上两种库文件可以通过PKCS#12格式的证书文件进行库文件导入/导出等，从而可以进行两种格式的库文件交换。
+---------------------使用jdk自带的keytool进行证书操作-------------------------------------
+生成密钥对：keytool -genkeypair -keyalg RSA -keysize 2048 -sigalg SHA1withRSA -validity 10 -alias www.ccs.org -keystore C:\tmp\ccs.keystore
+执行后提示：Warning:
+      JKS 密钥库使用专用格式。建议使用 "keytool -importkeystore -srckeystore C:\tmp\ccs.keystore -destkeystore C:\tmp\ccs.keystore -deststoretype pkcs12" 迁移到行业标准格式 PKCS12。
+导出证书：keytool -exportcert -alias www.ccs.org -keystore C:\tmp\ccs.keystore -file C:\tmp\ccs.cer -rfc //其中-rfc是指定以base64编码导出
+.csr 数字证书签发申请文件
+生成数字证书签发申请：keytool -certreq -alias www.ccs.org -keystore C:\tmp\ccs.keystore -file C:\tmp\ccs.csr -v //-v为详细信息
+导入证书：将数字证书css1.cer导入信任库css.keystore keytool -importcert -trustcacerts -alias www.ccs1.org -file C:\tmp\ccs1.cer -keystore C:\tmp\ccs.keystore
+---------------------使用jdk自带的keytool进行证书操作-------------------------------------
+消息摘要算法：MD5（32位16进制字符串）、SHA（40位16进制字符串）、SHA1、SHA224、SHA256、SHA384、SHA512
+对称加密算法：AES、DES、Triple DES、RC2、RC4、IDEA
+非对称加密算法：RSA、Diffie-Hellman(DH)
+数字签名算法：RSA、DSA、ECDSA
+PKI系统：认证中心，数字证书库，密钥备份及恢复系统，证书作废系统，应用程序接口API
+PKCS15项标准.2和4已被撤销，合并至PKCS#1中.
+        1：RSA公钥算法加密和签名机制。
+        3：DH密钥交换协议。
+        5：PBE加密标准。
+        6：公钥证书（X.509证书的扩展格式）标准语法
+        7：加密消息语法标准
+        8：私钥信息格式
+        9：选择属性格式
+        10：证书请求语法
+        11：密码装置标准接口
+        12：个人信息交换语法标准
+        13：椭圆曲线密码体制标准
+        14：伪随机数生成标准
+        15：密码令牌信息格式标准

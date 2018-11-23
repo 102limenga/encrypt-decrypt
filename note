@@ -14,13 +14,18 @@ PEM privacy-enhanced-mail隐私增强邮件,使用多种方法提供机密性、
       JKS 密钥库使用专用格式。建议使用 "keytool -importkeystore -srckeystore C:\tmp\ccs.keystore -destkeystore C:\tmp\ccs.keystore -deststoretype pkcs12" 迁移到行业标准格式 PKCS12。
 导出证书：keytool -exportcert -alias www.ccs.org -keystore C:\tmp\ccs.keystore -file C:\tmp\ccs.cer -rfc //其中-rfc是指定以base64编码导出
 .csr 数字证书签发申请文件
-生成数字证书签发申请：keytool -certreq -alias www.ccs.org -keystore C:\tmp\ccs.keystore -file C:\tmp\ccs.csr -v //-v为详细信息
+生成数字证书签发申请：keytool -certreq -alias www.ccs.org -keystore C:\tmp\ccs.keystore -file C:\tmp\ccs.csr -vo //-v为详细信息
 导入证书：将数字证书css1.cer导入信任库css.keystore keytool -importcert -trustcacerts -alias www.ccs1.org -file C:\tmp\ccs1.cer -keystore C:\tmp\ccs.keystore
 ---------------------使用jdk自带的keytool进行证书操作-------------------------------------
-消息摘要算法：MD5（32位16进制字符串）、SHA（40位16进制字符串）、SHA1、SHA224、SHA256、SHA384、SHA512
+消息摘要算法：MD5（32位16进制字符串）、
+        SHA（40位16进制字符串）、SHA1、SHA224、SHA256、SHA384、SHA512、
+        HmacMD5,HmacSHA1,HmacSHA256,HmacSHA384,HmacSHA512、
+        RipeMD128、RipeMD160、RipeMD256、RipeMD320、
+        Tiger、GOST3411、Whirlpool
 对称加密算法：AES、DES、Triple DES、RC2、RC4、IDEA
 非对称加密算法：RSA、Diffie-Hellman(DH)
 数字签名算法：RSA、DSA、ECDSA
+安全消息摘要：综合了md和sh算法，Mac或HmacMD5（消息认证码:Message Authentication Code）包括HmacMD5,HmacSHA1,HmacSHA256,HmacSHA384,HmacSHA512
 PKI系统：认证中心，数字证书库，密钥备份及恢复系统，证书作废系统，应用程序接口API
 PKCS15项标准.2和4已被撤销，合并至PKCS#1中.
         1：RSA公钥算法加密和签名机制。
@@ -36,3 +41,12 @@ PKCS15项标准.2和4已被撤销，合并至PKCS#1中.
         13：椭圆曲线密码体制标准
         14：伪随机数生成标准
         15：密码令牌信息格式标准
+-----------------------------------对称加密算法------------------------------------------------------------
+1、种类：
+        DES（data enc standard，经典算法）：密钥偏短，只有56位（bouncy castle是64位），且被怀疑存在后门，1998年被DES破译机破译，可在24小时内被破译，退出历史舞台
+        DESede(又称TripleESs或3DES，三重DES，增加了安全性)：处理速度较慢，密钥计算时间长，加密效率不高。密钥长度112或168位（bouncy castle是128、192位）。抗穷举能力提高了，但核心仍然是DES算法
+        AES（A是高级，advanced enc standard）用来替代DES。高级数据加密标准。密钥建立时间短，灵敏性和，内存需求低，性能好，安全强度高。
+        IDEA：国际数据加密算法。分组加密，密钥长度128，数据库大小64位，属于强加密算法，以目前计算机水平，破解需要10^13年。由于不是美国的算法，因此不受美国政策限制，可以自由出版和交流。目前最为常见的电子邮件加密算法之一。bouncy castle有其工具类。
+        PBE:(password based enc)基于密码的加密算法，通过能记住的短密码，与盐，再利用AES等已知算法进行综合加解密（密码和盐按照一定规则构成密钥）。
+        另外还有Blowfish,Serpent，RC2,RC4等
+-----------------------------------对称加密算法------------------------------------------------------------

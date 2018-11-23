@@ -39,6 +39,11 @@
             <artifactId>bctls-jdk15on</artifactId>
             <version>1.60</version>
         </dependency>
+        <dependency>
+            <groupId>limeng.org</groupId>
+            <artifactId>smart_util</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>
